@@ -36,10 +36,9 @@ data "aws_subnet" "az_b" {
 }
 
 resource "aws_instance" "server1" {
-  ami                    = "ami-0ddf424f81ddb0720"
-  instance_type          = "t2.micro"
-  user_data              = file("./user-data.sh")
-  vpc_security_group_ids = [aws_security_group.lb_sg.id]
+  ami           = "ami-0ddf424f81ddb0720"
+  instance_type = "t2.micro"
+  user_data     = file("./user-data.sh")
   tags = {
     Name = "server1"
   }
@@ -49,7 +48,6 @@ resource "aws_instance" "server1" {
 #   ami                    = "ami-0ddf424f81ddb0720"
 #   instance_type          = "t2.micro"
 #   user_data              = file("./user-data.sh")
-#   vpc_security_group_ids = [aws_security_group.lb_sg.id]
 #   tags = {
 #     Name = "server2"
 #   }
@@ -59,7 +57,6 @@ resource "aws_instance" "server1" {
 #   ami                    = "ami-0ddf424f81ddb0720"
 #   instance_type          = "t2.micro"
 #   user_data              = file("./user-data.sh")
-#   vpc_security_group_ids = [aws_security_group.lb_sg.id]
 #   tags = {
 #     Name = "server3"
 #   }
@@ -98,6 +95,14 @@ resource "aws_security_group" "lb_sg" {
     description = "Port 8080 access from servers"
     from_port   = 8080
     to_port     = 8080
+    protocol    = "TCP"
+  }
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Port 80 access from servers"
+    from_port   = 80
+    to_port     = 80
     protocol    = "TCP"
   }
 }

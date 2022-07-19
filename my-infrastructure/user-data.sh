@@ -1,6 +1,6 @@
 #! /bin/bash
-sudo apt update
-sudo apt install -y apache2
+sudo apt-get update
+sudo apt install apache2 --fix-missing -y
 hostname=$(hostname -I)
 echo "<html>" > index.html
 echo "<p>Hello world ${hostname}</p>" >> index.html
