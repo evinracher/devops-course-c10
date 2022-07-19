@@ -44,23 +44,23 @@ resource "aws_instance" "server1" {
   }
 }
 
-# resource "aws_instance" "server2" {
-#   ami                    = "ami-0ddf424f81ddb0720"
-#   instance_type          = "t2.micro"
-#   user_data              = file("./user-data.sh")
-#   tags = {
-#     Name = "server2"
-#   }
-# }
+resource "aws_instance" "server2" {
+  ami           = "ami-0ddf424f81ddb0720"
+  instance_type = "t2.micro"
+  user_data     = file("./user-data.sh")
+  tags = {
+    Name = "server2"
+  }
+}
 
-# resource "aws_instance" "server3" {
-#   ami                    = "ami-0ddf424f81ddb0720"
-#   instance_type          = "t2.micro"
-#   user_data              = file("./user-data.sh")
-#   tags = {
-#     Name = "server3"
-#   }
-# }
+resource "aws_instance" "server3" {
+  ami           = "ami-0ddf424f81ddb0720"
+  instance_type = "t2.micro"
+  user_data     = file("./user-data.sh")
+  tags = {
+    Name = "server3"
+  }
+}
 
 resource "aws_lb" "alb" {
   name               = "load-balancer"
@@ -110,6 +110,7 @@ resource "aws_security_group" "lb_sg" {
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.alb.arn
   port              = 80
+  protocol          = "HTTP"
 
   default_action {
     target_group_arn = aws_lb_target_group.this.arn
@@ -135,17 +136,17 @@ resource "aws_lb_target_group" "this" {
 resource "aws_lb_target_group_attachment" "server1" {
   target_group_arn = aws_lb_target_group.this.arn
   target_id        = aws_instance.server1.id
-  port             = "8080"
+  port             = "80"
 }
 
-# resource "aws_lb_target_group_attachment" "server2" {
-#   target_group_arn = aws_lb_target_group.this.arn
-#   target_id        = aws_instance.server2.id
-#   port             = "8080"
-# }
+resource "aws_lb_target_group_attachment" "server2" {
+  target_group_arn = aws_lb_target_group.this.arn
+  target_id        = aws_instance.server2.id
+  port             = "80"
+}
 
-# resource "aws_lb_target_group_attachment" "server3" {
-#   target_group_arn = aws_lb_target_group.this.arn
-#   target_id        = aws_instance.server3.id
-#   port             = "8080"
-# }
+resource "aws_lb_target_group_attachment" "server3" {
+  target_group_arn = aws_lb_target_group.this.arn
+  target_id        = aws_instance.server3.id
+  port             = "80"
+}
